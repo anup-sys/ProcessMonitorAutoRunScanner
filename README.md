@@ -63,68 +63,6 @@ pip install -r requirements.txt
 # or
 pip install psutil
 Run the scanner:
-
 bash
-Copy code
 python process_monitor_autorun_scanner.py
 To also export JSON:
-
-bash
-Copy code
-python process_monitor_autorun_scanner.py --json
-Reports will be saved in:
-
-bash
-Copy code
-reports/report_YYYYMMDD_HHMMSS.txt
-reports/report_YYYYMMDD_HHMMSS.json  (if --json provided)
-🧪 Example output (snippet)
-yaml
-Copy code
-Process Monitor + AutoRun Scanner
-Timestamp: 2025-10-21T14:22:03.123456
-Host: anup-Legion-5-15ACH6H (Linux 5.15.0-xx)
-User running scan: anup
-================================================================================
-[Processes] (pid | ppid | user | name | connections | exe)
-1 | 0 | root | systemd | conn=0 | exe=/sbin/init
-1234 | 1 | anup | suspicious_bin | conn=2 | exe=/tmp/suspicious_bin
-...
-================================================================================
-[Flagged Processes]
--> PID 1234 (suspicious_bin) reasons: running_from_temp, network_and_temp_or_missing_exe
-   cmdline: ['/tmp/suspicious_bin', '--serve']
-   exe: /tmp/suspicious_bin
-...
-================================================================================
-[Autorun / Startup Entries]
-{ "location": "/etc/cron.d", "entries": ["/etc/cron.d/example"] }
-...
-🛠️ Heuristics & Detection notes
-The tool intentionally uses simple heuristics for educational purposes. A flagged process is not proof of compromise.
-
-False positives are expected (e.g., legitimate installers run from /tmp).
-
-Use the report as a starting point for investigation:
-
-Inspect flagged processes with ps auxww, lsof -p <pid>, strace -p <pid> (careful; strace is invasive).
-
-Check file ownership, timestamps, and digital signatures (Windows).
-
-Compare suspect binary hashes to known-good baselines.
-
-🔍 Troubleshooting
-ModuleNotFoundError: No module named 'psutil'
-→ Install: pip install psutil or use python3 -m pip install --user psutil
-
-If running on a managed distro and pip is blocked, use a virtualenv or install python3-psutil via your package manager:
-
-Debian/Ubuntu: sudo apt install python3-psutil
-
-Fedora: sudo dnf install python3-psutil
-
-To see all processes on Linux/macOS you may need sudo:
-
-bash
-Copy code
-sudo python process_monitor_autorun_scanner.py
