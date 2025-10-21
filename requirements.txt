@@ -1,0 +1,6 @@
+psutil>=5.8.0
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install psutil
+python process_monitor_autorun_scanner.py --json
